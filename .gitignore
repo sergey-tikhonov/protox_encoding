@@ -134,3 +134,5 @@ venv.bak/
 # local files
 _local
 _local.py
+
+protox_encoding.c
