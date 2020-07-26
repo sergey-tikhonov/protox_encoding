@@ -5,8 +5,8 @@ pyximport.install(language_level='3')
 
 from protox_encoding import (
     encode_varint, decode_varint, encode_bytes, decode_bytes,
-    encode_zig_zag32, decode_zig_zag32, encode_zig_zag64, decode_zig_zag64, encode_header, decode_header, skip_fixed32,
-    skip_fixed64,
+    encode_zig_zag32, decode_zig_zag32, encode_zig_zag64, decode_zig_zag64,
+    encode_header, decode_header, skip_fixed32, skip_fixed64
 )
 
 
