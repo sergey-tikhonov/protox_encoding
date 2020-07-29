@@ -1,27 +1,30 @@
-from setuptools import setup, Extension
+import os
+from distutils.core import Extension, setup
 
-try:
+use_cython = bool(
+    os.environ.get('USE_CYTHON', '').strip()
+)
+
+if use_cython:
     from Cython.Build import cythonize
-except ModuleNotFoundError:
-    raise RuntimeError(
-        'Please install Cython to compile the library from source'
-    )
 
-extensions = [
-    Extension('protox_encoding', ['protox_encoding.pyx']),
-]
+if use_cython:
+    ext = 'pyx'
+else:
+    ext = 'c'
+
+extension = Extension(
+    name='protox_encoding',
+    sources=['protox_encoding.' + ext]
+)
+
+if use_cython:
+    ext_modules = cythonize(extension)
+else:
+    ext_modules = [extension]
 
 setup(
     name='protox_encoding',
-    version='0.0.3',
-    url='http://github.com/sergey-tikhonov/protox_encoding',
-    description='Protox encoding library written in Cython',
-    long_description=open('README.md', 'r').read(),
-    long_description_content_type='text/markdown',
-    ext_modules=cythonize(extensions),
-    author='Sergey Tikhonov',
-    author_email='srg.tikhonov@gmail.com',
-    license='MIT',
-    zip_safe=False,
-    python_requires=">=3.6",
+    version='0.0.5',
+    ext_modules=ext_modules
 )

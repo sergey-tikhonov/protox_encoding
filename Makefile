@@ -1,12 +1,13 @@
-build:
-	./setup.py build
+.PHONY: build dist install uninstall
 
-dist:
-	./setup.py sdist bdist_wheel
+build:
+	USE_CYTHON=1 python setup.py build_ext --inplace
+
+dist: build
+	python setup.py sdist
 
 install:
 	pip install .
 
 uninstall:
 	pip uninstall protox_encoding
-
