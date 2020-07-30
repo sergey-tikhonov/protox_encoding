@@ -1,12 +1,12 @@
 import pytest
-import pyximport
-
-pyximport.install(language_level='3')
 
 from protox_encoding import (
-    encode_varint, decode_varint, encode_bytes, decode_bytes,
-    encode_zig_zag32, decode_zig_zag32, encode_zig_zag64, decode_zig_zag64,
-    encode_header, decode_header, skip_fixed32, skip_fixed64
+    encode_varint, decode_varint,
+    encode_bytes, decode_bytes,
+    encode_zig_zag32, decode_zig_zag32,
+    encode_zig_zag64, decode_zig_zag64,
+    encode_header, decode_header,
+    read_bytes,
 )
 
 
@@ -73,13 +73,17 @@ def test_header(number: int, wire_type: int):
     assert decode_header(encoded_header, 0) == (number, wire_type, len(encoded_header))
 
 
-def test_skip_fixed32():
-    value = b'1234'
-    _, position = skip_fixed32(value, 0)
-    assert position == 4
+def test_read_bytes():
+    buffer = b'12345'
+    data, position = read_bytes(buffer, 0, 3)
 
+    assert data == b'123'
+    assert position == 3
 
-def test_skip_fixed64():
-    value = b'12345678'
-    _, position = skip_fixed64(value, 0)
-    assert position == 8
+    data, position = read_bytes(buffer, position, 2)
+
+    assert data == b'45'
+    assert position == 5
+
+    with pytest.raises(RuntimeError):
+        read_bytes(buffer, position, 1)

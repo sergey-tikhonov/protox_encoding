@@ -1,13 +1,17 @@
 .PHONY: build dist install uninstall
 
-build:
-	USE_CYTHON=1 python setup.py build_ext --inplace
+build: clean
+	USE_CYTHON=1 python3.8 setup.py build_ext --inplace
 
 dist: build
-	python setup.py sdist
+	python3.8 setup.py sdist
 
-install:
-	pip install .
+clean:
+	rm -f *.so
+	rm -f *.c
+
+install: uninstall dist
+	python3.8 -m pip install .
 
 uninstall:
-	pip uninstall protox_encoding
+	python3.8 -m pip uninstall -y protox_encoding
