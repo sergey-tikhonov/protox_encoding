@@ -268,6 +268,7 @@ def message_fields_from_bytes(
     data: bytes,
     required_fields: set,
     field_by_number: dict,
+    strict: bool,
 ):
     position = 0
     message_fields = {}
@@ -291,7 +292,7 @@ def message_fields_from_bytes(
             # skip unknown fields
             _, position = wire_type_to_decoder[wire_type](data, position)
 
-    if required_fields_left:
+    if strict and required_fields_left:
         raise MessageDecodeError(
             f"Missing required fields {required_fields_left}"
         )
