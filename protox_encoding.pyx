@@ -1,4 +1,5 @@
 # cython: language_level=3
+# distutils: language = c++
 import struct
 
 from libc.stdint cimport uint64_t, uint8_t
@@ -40,11 +41,11 @@ def decode_varint(
             return rv, position
 
         if shift > 63:
-            raise RuntimeError(
+            raise MessageDecodeError(
                 'Too many bytes when decoding varint'
             )
 
-    raise RuntimeError(
+    raise MessageDecodeError(
         'Unexpected end of buffer when decoding varint'
     )
 
@@ -60,7 +61,7 @@ def decode_bytes(
     data = buffer[position:position + length]
 
     if len(data) < length:
-        raise RuntimeError(
+        raise MessageDecodeError(
             'Unexpected end of buffer when decoding bytes'
         )
 
@@ -97,7 +98,7 @@ def read_bytes(
     Py_ssize_t n
 ):
     if len(buffer) - position < n:
-        raise RuntimeError(
+        raise MessageDecodeError(
             f'Expected to read {n} bytes, got {len(buffer) - position} bytes instead'
         )
 
