@@ -25,6 +25,6 @@ else:
 
 setup(
     name='protox_encoding',
-    version='0.0.6',
+    version='0.0.7',
     ext_modules=ext_modules
 )
